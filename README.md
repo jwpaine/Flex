@@ -83,6 +83,40 @@ Making use of dependency patterns allows us to break coherent functionality off 
 
 ![dependency.png](dependency.png) 
 
+#### Defining, Using, and Rendering Dependencies
+
+**Define a dependency**:
+
+```
+#defineDependency(‘my-dependency’, {
+	‘headMarkup’ : [
+		“<script src=’...’></script>”,
+“/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/js_template.vm”,
+] ,
+	‘footMarkup’ : [
+		“Asset_1”,
+		“Asset_2”,
+		     ...
+		“Asset_n”
+		] ,
+
+‘requires’ : [‘jquery’, ‘dep_2’, … ‘dep_n’]
+
+})
+```
+The #defineDependency macro is passed a dependency name, and a hashmap which may contain section-name/static-asset pairs along with a list of sub-dependencies required. Above, ‘headMarkup’ maps to a list containing a script and a local template. 
+
+**Use and render**:
+```
+#useDependency(‘my-dependency’)
+#renderDependencies(‘headMarkup’)
+```
+The useDependency macro flags a dependency as being used. Will render out any dependency sections, if renderDependencies(sectionName) is called.
+
+**Dependencies in action**:
+
+![dependency_in_action.png](dependency_in_action.png) 
+
 -> The MTL template `lib_macros_dependencies.vm` contains the code responsible for using and rendering dependencies. Open this template to explore the underlying mechanics if desired!
 
 ---
