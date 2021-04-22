@@ -4,7 +4,7 @@
 
 This tutorial walks through all aspects of the 'Flex' codebase. We start by comparing and contrasting general architecture against our legacy code base. Afterwords, we deep dive into the core functionality of Flex, explore modular design patterns, ...
 
-## 1.0: Termonology and General Architecture:
+## Termonology and General Architecture:
 
 * **C8**
     Avetti's Commerce-8 platform: a multi-vendor ecommerce platform.
@@ -23,32 +23,7 @@ This tutorial walks through all aspects of the 'Flex' codebase. We start by comp
 * **Master Template Library (MTL)**
     * A shop on each cluster which acts as a central responsitory for velocity templates Globally scoped, templates and methods leveraged by all shops on a cluster.
 
-## Navigating Stores
-
-When logged into the admin console, on either the preview or production instances, you'll be presented with a list of shops, and their corresponding store id (vid), website name, and url. Clicking on a store id will bring you to setup for the respective store.
-
-## Shop configuration
-
-### categories
-
-### admin preferences
-
-### site preferences
-
-### store properties
-
-### order preferences
-
-### payment gateways
-
-### email settings
-
-### shipping
-
-### publishing
-
-
-## 2.0 Flex MTL:
+## Flex MTL:
 
 ### About
 * Coined *Flex* after the CSS layout, *Flexbox* to distinguish the fact that our sites are responsive and mobile friendly. 
@@ -59,26 +34,25 @@ When logged into the admin console, on either the preview or production instance
 ### Architecture
 
 The Flex MTL codebase is seperated into two parts: **velocity templates**, and **skeleton library**.
-On the velocity template side, there are three core elements supporting modularity on Flex, each of which provide a layer of abstraction over underlying static templates:
+On the velocity template side, there are three core patterns on Flex, each of which provide a layer of abstraction over underlying static templates:
 
 ---
-#### Partials
+1. #### Partials
 
-Velocity provides the macro #parse, which allows us to parse in a named template, directly. 
+Velocity provides the macro `#parse`, which allows us to parse in a named template, directly. 
 
 * Use `#parse("template_name.vm")` when parsing templates stored in the MTL
 
 * Use `#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/template_name.vm")` when parsing templates, local to your shop.
 
-Building on top of the `#parse()` macro, **partials** are used to help de-couple template parsing. Take for example the category.vm template for a shop on C1 or C2: this template parses in an MTL template responsible for rendering category items, by calling `#parse("libpartCategoryProductList.vm")`. If you wishe to modify functionality within libpartCategoryProductList.vm, without affecting other shops on the cluster, you'll need to comment out that #parse, and replace it with the *contents of*  libpartCategoryProductList.vm -- 
+Building on top of the `#parse()` macro, **partials** are used to help de-couple template parsing. Take for example the category.vm template for a shop on C1 or C2: this template parses in a template from the MTL which is responsible for rendering category items, by calling `#parse("libpartCategoryProductList.vm")`. If you wish to modify functionality within libpartCategoryProductList.vm, without affecting other shops on the cluster, you you need to comment out that `#parse` statement, and replace it with the *contents of*  libpartCategoryProductList.vm -- 
 
-For a Flex site, within category.vm, we're also relying upon an MTL template to extend to our category.vm template the ability to render category items; however, we're calling `#renderPartials('category-content')` instead. When this macro is rendered, if local template `/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/category-content.vm` was found when the partial was *initialized* when calling `#usePartials('category-content')` at the top of the template, than the content of that local template is rendered. If a local version was not found, than the global template `lib_category-content.vm` would be rendered. An error will offer when `#usePartials(partial_name)` is called, if neither an MTL nor local version exists. This general pattern allows us to create an alias for templates, and helps to keep things modular.
-
+For a Flex site, we're also relying upon an MTL template for render category items; however, we're calling `#renderPartials('category-content')` instead. When this `#renderPartials` macro is rendered, if local template `/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/category-content.vm` was found when the partial was *initialized* when `#usePartials('category-content')` was called at the top of the template, than the content of that local template is rendered. If a local version was not found, than the global template `lib_category-content.vm` would be rendered. An error will offer when `#usePartials(partial_name)` renders, if neither an MTL nor local version exists. This general pattern allows us to create an alias for templates.
 
 The MTL template `lib_macros_partials.vm` contains the code responsible for using and rendering partials. Open this template to explore the underlying mechanics if desired!
 
 ---
-#### Dependencies
+2. #### Dependencies
 
 Making use of dependency patterns allows us to break coherent functionality off into it's own discrete ‘contract’, leading to code that is easier to manage, test, and re-use.
 
@@ -112,7 +86,7 @@ The `#defineDependency` macro is passed a dependency name, and a hashmap which m
 #useDependency(‘my-dependency’)
 #renderDependencies(‘headMarkup’)
 ```
-The `useDependency` macro flags a dependency as being used. Will render out any dependency sections, if renderDependencies(sectionName) is called.
+The `useDependency` macro flags a dependency as being used. Will render out any dependency sections, if `#renderDependencies(sectionName)` is called.
 
 **Dependencies in action**:
 
@@ -123,14 +97,12 @@ The `useDependency` macro flags a dependency as being used. Will render out any 
 The MTL template `lib_macros_dependencies.vm` contains the code responsible for using and rendering dependencies. Open this template to explore the underlying mechanics if desired!
 
 ---
-#### components
+3. #### components
 
 Components allow you to split the UI into independent, reusable pieces and provides abstraction over a predefined set of properties (DefaultSettings) and any underlying code describing how a segment of the user interface should be rendered. The key takeaway is modularity and reusability.
 
 ![components.png](components.png) 
 
-
-The MTL template `lib_macros_components.vm` contains the code responsible for using and rendering dependencies. Open this template to explore the underlying mechanics if desired!
 
 **Creating a component**:
 
@@ -207,22 +179,121 @@ Calling the #setComponentSetting macro allows us to override a componentDefaultS
 #renderComponent('componentName')
 ```
 
+The MTL template `lib_macros_components.vm` contains the code responsible for using and rendering dependencies. Open this template to explore the underlying mechanics if desired!
+
 ### skeleton library:
 
+There are 23 javascript files which comprise the Flex Skeleton Library:
+
+* ss.breakpoint-imaging.js
+* ss.cache.js
+* ss.categories.js
+* ss.checkout-address.js
+* ss.checkout-basket.js
+* ss.checkout-payment.js
+* ss.checkout-review.js
+* ss.custom-modals.js
+* ss.customers.js
+* ss.custprops-admin.js
+* ss.date.js
+* ss.global.js
+* ss.invoicing-admin.js
+* ss.js
+* ss.message-box.js
+* ss.minicart.js
+* ss.navBuilder.js
+* ss.points-admin.js
+* ss.price.js
+* ss.product-detail.js
+* ss.product-tabs.js
+* ss.shoppergroup-admin.js
+* ss.wishlist.js
+
+Each of the files above are loaded through a seperate dependency, defined in `lib_configs.vm` in the Flex MTL. 
+On the preview environment, these assets are located in the `/avetti/httpd/htdocs/content/preview/store/20170604234/assets/js` directory.
+
+Each .js file is of the following form:
+
+```
+ss.dependency_name = (function (){
+
+	var dependency_name = {}
+
+    dependency_name.defaultConfigs = {
+        'key_1' : 'value_1',
+        ...,
+        'key_n : 'value_n'
+    }
+
+    dependency_name.globalFunction = function() {
+
+    }
+
+    var localFunction = function() {
+
+    }
+
+    return dependency_name
+})()
+```
+
+Along with the .js file on disk, the skeleton store dependencies defined in `lib_configs.vm` may also leverage a seperate velocity template used to initalize values in the .js file.
+
+The `ss.product-detail` dependency is an example of this:
+
+```
+#defineDependency('ss.product-detail', {
+	'requires': ['ss', 'ss.cache', 'ss.price', 'ss.minicart', 'dialog-polyfill', 'jquery', 'magic-zoom-plus', 'ss.message-box', 'spin'],
+	'footMarkup': [
+		"<script src='store/$configMTLVID/assets/js/ss.product-detail.js'></script>",
+		"lib_js_product_detail.vm"
+	]
+})
+
+```
+On a shop's `item.vm` template, `#useDependency('ss.product-detail')` is called, the 9 other dependencies required by `ss.product-detail` are loaded, and when `#renderDependencies('footMarkup')` is rendered at bottom of the item.vm template, `store/$configMTLVID/assets/js/ss.product-detail.js` is rendered, alongside the content of MTL template `lib_js_product_detail.vm`.
+
+Taking a look at the contents of lib_js_product_detail.vm reveals, amongst other things, the initalization of a number of default settings for product_detail:
+
+```
+	ss.product_detail.defaultConfigs.quantityVerbiage = "$esc.javascript("#showMessage('item.label.quantity')")";
+	ss.product_detail.defaultConfigs.excludeProductImage = 'noimage.jpg';
+    ss.product_detail.itemCode = "$esc.javascript($item.itemCode)";
+	ss.product_detail.itemID = "$esc.javascript($item.itemid)";
+
+    ...
+```
+
+## Your Flex Store:
+
+I've setup a test site that you can modify and learn on:
+
+When logging in via https://ggc8admin3.avetti.ca/preview/login.admin 
+
+You'll find the website named `CJORDAN SANDBOX` with store id 20210422954
+
+Clicking the store id will allow to you access settings for this Shop. From there, feel free to poke around. 'templates -> manage templates' will allow you to view all templates for this shop. Template `home.vm` is rendered when hitting your site link, on preview:
+
+https://ggc8admin3.avetti.ca/preview/store.html?vid=20210422954
 
 
-				
-## 3.0: Flex Store
+## Things to cover...
 
-### Parsing templates, directly
+1. General store configuration
 
-### Using partials
+2. Defining new local dependencies
 
-### Using dependencies
+3. Changing default settings for components
 
-### using components
+5. Overriding an MTL dependency
 
-### Stylesheets
+6. Stylesheets: Skinning process, skinning tool
+
+7. Transfering files via sFTP
+
+8. Interfacing with velocity templates using sublime
+
+
 
 
 
