@@ -56,6 +56,8 @@ When logged into the admin console, on either the preview or production instance
 * Flex employs modular design patterns (components, dependencies and partials)
 * Syntatically Awesome Stylesheets (SASS) is used on all Flex sites.
 
+### Architecture
+
 The Flex MTL codebase is seperated into two parts: velocity templates, and skeleton library
 
 ### velocity:
