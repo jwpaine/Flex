@@ -51,18 +51,15 @@ When logged into the admin console, on either the preview or production instance
 ## 2.0 Flex MTL:
 
 ### About
-* Coined *Flex* after the CSS layout, *Flexbox*. For Clients, Sales Reps and Program managers, this distinguishes the fact that our sites are responsive and mobile friendly. Bottom line: provide the best possible customer experience that's as simple and smooth as possible, end-to-end. 
-* Development began a couple of years back. As of 2020, all new sites are developed on C3.
+* Coined *Flex* after the CSS layout, *Flexbox* to distinguish the fact that our sites are responsive and mobile friendly. 
+* As of 2020, all new sites are developed in Flex.
 * Flex employs modular design patterns (components, dependencies and partials)
 * Syntatically Awesome Stylesheets (SASS) is used on all Flex sites.
 
 ### Architecture
 
-The Flex MTL codebase is seperated into two parts: velocity templates, and skeleton library
-
-### velocity:
-
-There are three core elements supporting modularity on Flex, each of which provide a layer of abstraction over underlying static velocity templates:
+The Flex MTL codebase is seperated into two parts: **velocity templates**, and **skeleton library**.
+On the velocity template side, there are three core elements supporting modularity on Flex, each of which provide a layer of abstraction over underlying static templates:
 
 ---
 #### partials
@@ -77,7 +74,7 @@ For a Flex site, within category.vm, we're also relying upon an MTL template to 
 The MTL template `lib_macros_partials.vm` contains the code responsible for using and rendering partials. Open this template to explore the underlying mechanics if desired!
 
 ---
-#### dependencies
+#### Dependencies
 
 Making use of dependency patterns allows us to break coherent functionality off into it's own discrete ‘contract’, leading to code that is easier to manage, test, and re-use.
 
@@ -185,7 +182,7 @@ Testing macro is set:
 
 ```
 
-**Creating a component**:
+**Using a component**:
 
 We can now use and render our component in another template on the site:
 
