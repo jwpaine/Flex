@@ -65,7 +65,7 @@ The Flex MTL codebase is seperated into two parts: velocity templates, and skele
 There are three core elements supporting modularity on Flex, each of which provide a layer of abstraction over underlying static velocity templates:
 
 ---
-#### partials
+1. #### partials
 
 Velocity provides the macro #parse, which allows us to parse in a named template, directly. Use `#parse("template_name.vm")` when parsing templates stored in the MTL, and `#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/template_name.vm")` when parsing templates, local to your shop.
 
@@ -77,12 +77,12 @@ For a Flex site, within category.vm, we're also relying upon an MTL template to 
 -> The MTL template `lib_macros_partials.vm` contains the code responsible for using and rendering partials. Open this template to explore the underlying mechanics if desired!
 
 ---
-#### dependencies
+2. #### dependencies
 
 -> The MTL template `lib_macros_dependencies.vm` contains the code responsible for using and rendering dependencies. Open this template to explore the underlying mechanics if desired!
 
 ---
-#### components
+3. #### components
 
 lib_macros_components
 
