@@ -79,6 +79,10 @@ For a Flex site, within category.vm, we're also relying upon an MTL template to 
 ---
 #### dependencies
 
+Making use of dependency patterns allows us to break coherent functionality off into it's own discrete ‘contract’, leading to code that is easier to manage, test, and re-use.
+
+![dependency.png](dependency.png) 
+
 -> The MTL template `lib_macros_dependencies.vm` contains the code responsible for using and rendering dependencies. Open this template to explore the underlying mechanics if desired!
 
 ---
