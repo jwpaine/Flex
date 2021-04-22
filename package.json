@@ -1,0 +1,22 @@
+{
+  "name": "flex",
+  "version": "1.0.0",
+  "description": "This tutorial walks through all aspects of the 'Flex' codebase. We start by comparing and contrasting general architecture against our legacy code base. Afterwords, we deep dive into the core functionality of Flex, explore modular design patterns, ...",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jwpaine/Flex.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jwpaine/Flex/issues"
+  },
+  "homepage": "https://github.com/jwpaine/Flex#readme",
+  "dependencies": {
+    "markdown-pdf": "^10.0.0"
+  }
+}
