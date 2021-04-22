@@ -4,7 +4,7 @@
 
 This tutorial walks through all aspects of the 'Flex' codebase. We start by comparing and contrasting general architecture against our legacy code base. Afterwords, we deep dive into the core functionality of Flex, explore modular design patterns, ...
 
-## 1.0: Termonology and architecture:
+## 1.0: Termonology and General Architecture:
 
 * **C8**
     Avetti's Commerce-8 platform: a multi-vendor ecommerce platform.
@@ -21,9 +21,34 @@ This tutorial walks through all aspects of the 'Flex' codebase. We start by comp
     * On C8, a shop's static files are located in the directory: /avetti/httpd/htdocs/content/preview/store/{vid}
     * css files are stored in ../{vid}/assets/themes/blaze_en/css"
 * **Master Template Library (MTL)**
-    * A shop on each cluster which acts as a central responsitory for velocity templates Globally scoped, templates and methods accessible to all shops
+    * A shop on each cluster which acts as a central responsitory for velocity templates Globally scoped, templates and methods leveraged by all shops on a cluster.
 
-## 2.0 Flex code base:
+## Navigating Stores
+
+When logged into the admin console, on either the preview or production instances, you'll be presented with a list of shops, and their corresponding store id (vid), website name, and url. Clicking on a store id will bring you to setup for the respective store.
+
+## Shop configuration
+
+### categories
+
+### admin preferences
+
+### site preferences
+
+### store properties
+
+### order preferences
+
+### payment gateways
+
+### email settings
+
+### shipping
+
+### publishing
+
+
+## 2.0 Flex MTL:
 
 ### About
 * Coined *Flex* after the CSS layout, *Flexbox*. For Clients, Sales Reps and Program managers, this distinguishes the fact that our sites are responsive and mobile friendly. Bottom line: provide the best possible customer experience that's as simple and smooth as possible, end-to-end. 
@@ -33,18 +58,49 @@ This tutorial walks through all aspects of the 'Flex' codebase. We start by comp
 
 ### Architecture:
 
-There are three fundemental concepts responsible for supporting modularity on Flex by providing a layer of abstraction on top of static velocity templates:
+The Flex MTL codebase is seperated into two parts: velocity templates, and skeleton library
 
-#### partials
+#### velocity:
 
-lib_macros_partials
+There are three core elements supporting modularity on Flex, each of which provide a layer of abstraction over underlying static velocity templates:
 
-#### dependencies
+##### partials
 
-Lib_macros_dependencies.vm
+Velocity provides the macro #parse, which allows us to parse in a named template, directly. Use `#parse("template_name.vm")` when parsing templates stored in the MTL, and `#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/template_name.vm")` when parsing templates, local to your shop.
+
+Building on top of the `#parse()` macro, **partials** are used to help de-couple template parsing. Take for example the category.vm template for a shop on C1 or C2: this template parses in an MTL template responsible for rendering category items, by calling `#parse("libpartCategoryProductList.vm")`. If you wishe to modify functionality within libpartCategoryProductList.vm, without affecting other shops on the cluster, you'll need to comment out that #parse, and replace it with the *contents of*  libpartCategoryProductList.vm -- 
+
+For a Flex site, within category.vm, we're also relying upon an MTL template to extend to our category.vm template the ability to render category items; however, we're calling `#renderPartials('category-content')` instead. When this macro is rendered, if local template `/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/category-content.vm` was found when the partial was *initialized* when calling `#usePartials('category-content')` at the top of the template, than the content of that local template is rendered. If a local version was not found, than the global template `lib_category-content.vm` would be rendered. An error will offer when `#usePartials(partial_name)` is called, if neither an MTL nor local version exists. This general pattern allows us to create an alias for templates, and helps to keep things modular.
 
 
-#### components
+-> The MTL template `lib_macros_partials.vm` contains the code responsible for using and rendering partials. Open this template to explore the underlying mechanics if desired!
+
+##### dependencies
+
+-> The MTL template `lib_macros_dependencies.vm` contains the code responsible for using and rendering dependencies. Open this template to explore the underlying mechanics if desired!
+
+
+
+##### components
 
 lib_macros_components
+
+#### skeleton library:
+
+
+
 				
+## 3.0: Flex Store
+
+### Parsing templates, directly
+
+### Using partials
+
+### Using dependencies
+
+### using components
+
+### Stylesheets
+
+
+
