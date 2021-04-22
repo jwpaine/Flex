@@ -56,15 +56,13 @@ When logged into the admin console, on either the preview or production instance
 * Flex employs modular design patterns (components, dependencies and partials)
 * Syntatically Awesome Stylesheets (SASS) is used on all Flex sites.
 
-### Architecture:
-
 The Flex MTL codebase is seperated into two parts: velocity templates, and skeleton library
 
-#### velocity:
+### velocity:
 
 There are three core elements supporting modularity on Flex, each of which provide a layer of abstraction over underlying static velocity templates:
 
-##### partials
+#### partials
 
 Velocity provides the macro #parse, which allows us to parse in a named template, directly. Use `#parse("template_name.vm")` when parsing templates stored in the MTL, and `#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/template_name.vm")` when parsing templates, local to your shop.
 
@@ -75,17 +73,16 @@ For a Flex site, within category.vm, we're also relying upon an MTL template to 
 
 -> The MTL template `lib_macros_partials.vm` contains the code responsible for using and rendering partials. Open this template to explore the underlying mechanics if desired!
 
-##### dependencies
+#### dependencies
 
 -> The MTL template `lib_macros_dependencies.vm` contains the code responsible for using and rendering dependencies. Open this template to explore the underlying mechanics if desired!
 
 
-
-##### components
+#### components
 
 lib_macros_components
 
-#### skeleton library:
+### skeleton library:
 
 
 
