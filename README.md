@@ -63,7 +63,7 @@ The Flex MTL codebase is seperated into two parts: velocity templates, and skele
 There are three core elements supporting modularity on Flex, each of which provide a layer of abstraction over underlying static velocity templates:
 
 #### partials
-
+---
 Velocity provides the macro #parse, which allows us to parse in a named template, directly. Use `#parse("template_name.vm")` when parsing templates stored in the MTL, and `#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/template_name.vm")` when parsing templates, local to your shop.
 
 Building on top of the `#parse()` macro, **partials** are used to help de-couple template parsing. Take for example the category.vm template for a shop on C1 or C2: this template parses in an MTL template responsible for rendering category items, by calling `#parse("libpartCategoryProductList.vm")`. If you wishe to modify functionality within libpartCategoryProductList.vm, without affecting other shops on the cluster, you'll need to comment out that #parse, and replace it with the *contents of*  libpartCategoryProductList.vm -- 
