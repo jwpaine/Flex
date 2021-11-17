@@ -264,11 +264,11 @@ I've setup a test site that you can modify and learn on:
  
 When logging in via https://ggc8admin3.avetti.ca/preview/login.admin 
  
-You'll find the website named `CJORDAN SANDBOX` with store id 20210422954
+You'll find the website named `ANDREW SANDBOX` with store id 20211117724
  
 Clicking the store id will allow you to access settings for this Shop. From there, feel free to poke around. 'templates -> manage templates' will allow you to view all templates for this shop. Template `home.vm` is rendered when hitting your site link, on preview:
  
-https://ggc8admin3.avetti.ca/preview/store.html?vid=20210422954
+https://ggc8admin3.avetti.ca/preview/store.html?vid=20211117724
  
  
 ## Things to cover...
@@ -284,6 +284,4 @@ https://ggc8admin3.avetti.ca/preview/store.html?vid=20210422954
 6. Stylesheets: Skinning process, skinning tool
  
 7. Transfering files via sFTP
- 
-8. Interfacing with velocity templates using sublime
 
